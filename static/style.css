@@ -1,0 +1,196 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0b1120;
+    color: white;
+}
+
+/* Header */
+
+.header {
+    background: #111c32;
+    padding: 22px 30px;
+    border-bottom: 1px solid #26344f;
+}
+
+.header h1 {
+    color: #38bdf8;
+    font-size: 27px;
+}
+
+.header p {
+    color: #94a3b8;
+    margin-top: 7px;
+}
+
+/* Main Container */
+
+.container {
+    padding: 30px;
+}
+
+.section-title {
+    margin-bottom: 20px;
+    color: #e2e8f0;
+}
+
+/* Dashboard Cards */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: #162238;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #26344f;
+}
+
+.card h3 {
+    color: #94a3b8;
+    font-size: 15px;
+}
+
+.card h2 {
+    margin-top: 18px;
+    font-size: 30px;
+    color: #38bdf8;
+}
+
+/* Monitoring Panels */
+
+.panel {
+    background: #162238;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #26344f;
+    margin-bottom: 20px;
+}
+
+.panel h3 {
+    color: #38bdf8;
+    margin-bottom: 15px;
+}
+
+.status {
+    color: #22c55e;
+    font-weight: bold;
+}
+
+/* Footer */
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: #64748b;
+}
+
+/* Responsive Design */
+
+@media (max-width: 900px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 550px) {
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        padding: 15px;
+    }
+}
+/* Recent Network Traffic Table */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.traffic-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 750px;
+    color: #ffffff;
+}
+
+.traffic-table th {
+    background: #172554;
+    color: #38bdf8;
+    padding: 15px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.traffic-table td {
+    padding: 13px 15px;
+    border-bottom: 1px solid #334155;
+    font-size: 13px;
+}
+
+.traffic-table tr:hover {
+    background: #1e293b;
+}
+
+.traffic-table tbody tr:nth-child(even) {
+    background: rgba(30, 41, 59, 0.5);
+}
+/* Security Alert Severity Labels */
+
+.severity-high {
+    color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.15);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.severity-medium {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.15);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.severity-low {
+    color: #22c55e;
+    background: rgba(34, 197, 94, 0.15);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+/* Unblock IP Button */
+
+.unblock-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.unblock-btn:hover {
+    background: #991b1b;
+    transform: scale(1.05);
+}
+
+.unblock-btn:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+}

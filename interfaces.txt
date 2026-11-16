@@ -1,0 +1,39 @@
+
+NETWORK INTERFACE DETAILS
+======================================================================
+Name: Local Area Connection* 9
+Description: WAN Miniport (Network Monitor)
+IP Address: 
+----------------------------------------------------------------------
+Name: Local Area Connection* 8
+Description: WAN Miniport (IPv6)
+IP Address: 
+----------------------------------------------------------------------
+Name: Local Area Connection* 7
+Description: WAN Miniport (IP)
+IP Address: 
+----------------------------------------------------------------------
+Name: Bluetooth Network Connection
+Description: Bluetooth Device (Personal Area Network)
+IP Address: 169.254.171.107
+----------------------------------------------------------------------
+Name: Wi-Fi 2
+Description: Qualcomm QCA61x4A 802.11ac Wireless Adapter
+IP Address: 10.218.38.162
+----------------------------------------------------------------------
+Name: Local Area Connection* 12
+Description: Microsoft Wi-Fi Direct Virtual Adapter #4
+IP Address: 169.254.220.241
+----------------------------------------------------------------------
+Name: Local Area Connection* 11
+Description: Microsoft Wi-Fi Direct Virtual Adapter #3
+IP Address: 169.254.89.209
+----------------------------------------------------------------------
+Name: Loopback Pseudo-Interface 1
+Description: Software Loopback Interface 1
+IP Address: 127.0.0.1
+----------------------------------------------------------------------
+Name: Ethernet 2
+Description: Realtek PCIe GbE Family Controller #2
+IP Address: 169.254.249.121
+----------------------------------------------------------------------

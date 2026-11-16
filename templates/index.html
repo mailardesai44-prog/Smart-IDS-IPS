@@ -1,0 +1,458 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart IDS/IPS Dashboard</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="header">
+    <h1>🛡️ SMART IDS/IPS</h1>
+    <p>Intelligent Network Security Monitoring System</p>
+</header>
+
+<main class="container">
+
+    <h2 class="section-title">Security Overview</h2>
+
+    <!-- Network Protocol Distribution -->
+    <div class="panel">
+        <h3>Network Protocol Distribution</h3>
+
+        <div style="max-width:350px; height:350px; margin:auto;">
+            <canvas
+                id="protocolChart"
+                data-protocol='{{ protocol_counts | tojson }}'>
+            </canvas>
+        </div>
+    </div>
+
+    <!-- Security Risk Distribution -->
+    <div class="panel">
+        <h3>Security Risk Distribution</h3>
+
+        <div style="max-width:500px; height:300px; margin:auto;">
+            <canvas
+                id="riskChart"
+                data-risk='{{ risk_counts | tojson }}'>
+            </canvas>
+        </div>
+    </div>
+
+    <!-- Dashboard Statistics -->
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Packets</h3>
+            <h2>{{ total_packets }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>Detected Threats</h3>
+            <h2>{{ total_threats }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>Blocked IPs</h3>
+            <h2>{{ blocked_ips }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>Security Alerts</h3>
+            <h2>{{ total_alerts }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>TCP Packets</h3>
+            <h2>{{ protocol_counts['TCP'] }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>UDP Packets</h3>
+            <h2>{{ protocol_counts['UDP'] }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>ICMP Packets</h3>
+            <h2>{{ protocol_counts['ICMP'] }}</h2>
+        </div>
+
+        <div class="card">
+            <h3>Other Packets</h3>
+            <h2>{{ protocol_counts['OTHER'] }}</h2>
+        </div>
+
+    </div>
+
+    <!-- Recent Network Traffic -->
+    <div class="panel">
+
+        <h3>Recent Network Traffic</h3>
+
+        <div class="table-container">
+
+            <table class="traffic-table">
+
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Source IP</th>
+                        <th>Destination IP</th>
+                        <th>Protocol</th>
+                        <th>Packet Size</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for packet in recent_packets %}
+
+                    <tr>
+                        <td>{{ packet['timestamp'] }}</td>
+                        <td>{{ packet['source_ip'] }}</td>
+                        <td>{{ packet['destination_ip'] }}</td>
+                        <td>{{ packet['protocol'] }}</td>
+                        <td>{{ packet['packet_size'] }} bytes</td>
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="5">No network packets available.</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+    <!-- Security Alerts -->
+    <div class="panel">
+
+        <h3>Security Alerts</h3>
+
+        <div class="table-container">
+
+            <table class="traffic-table">
+
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Source IP</th>
+                        <th>Attack Type</th>
+                        <th>Severity</th>
+                        <th>Risk Score</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for alert in recent_alerts %}
+
+                    <tr>
+                        <td>{{ alert['timestamp'] }}</td>
+                        <td>{{ alert['source_ip'] }}</td>
+                        <td>{{ alert['attack_type'] }}</td>
+
+                        <td>
+                            <span class="severity-{{ alert['severity']|lower }}">
+                                {{ alert['severity'] }}
+                            </span>
+                        </td>
+
+                        <td>{{ alert['risk_score'] }}/100</td>
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="5">No security alerts found.</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+    <!-- Blocked IP Addresses -->
+    <div class="panel">
+
+        <h3>Blocked IP Addresses</h3>
+
+        <div class="table-container">
+
+            <table class="traffic-table">
+
+                <thead>
+                    <tr>
+                        <th>IP Address</th>
+                        <th>Reason</th>
+                        <th>Blocked At</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for item in recent_blocked_ips %}
+
+                    <tr>
+                        <td>{{ item['ip_address'] }}</td>
+                        <td>{{ item['reason'] }}</td>
+                        <td>{{ item['blocked_at'] }}</td>
+
+                        <td>
+                            {% if item['status'] == 'Active' %}
+                                <span class="severity-high">Active</span>
+                            {% else %}
+                                <span class="severity-low">Unblocked</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if item['status'] == 'Active' %}
+
+                            <form method="POST"
+                                action="{{ url_for('unblock_ip_route', ip_address=item['ip_address']) }}">
+
+                                <button type="submit" class="unblock-btn">
+                                    Unblock
+                                </button>
+
+                            </form>
+
+                            {% else %}
+
+                                <span>Completed</span>
+
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="5">No blocked IP addresses found.</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+  
+<!-- Network Monitoring Status -->
+<div class="panel">
+    <h3>Network Monitoring</h3>
+    <p class="status">
+        ● {{ monitoring_status }}
+    </p>
+    <p>{{ monitoring_message }}</p>
+</div>
+
+<!-- Threat Detection Status -->
+<div class="panel">
+    <h3>Threat Detection Engine</h3>
+    <p class="status">
+        ● {{ detection_status }}
+    </p>
+    <p>{{ detection_message }}</p>
+</div>
+
+<!-- Intrusion Prevention Status -->
+<div class="panel">
+    <h3>Intrusion Prevention System</h3>
+    <p class="status">
+        ● {{ prevention_status }}
+    </p>
+    <p>{{ prevention_message }}</p>
+</div>
+
+
+</main>
+
+<footer class="footer">
+    Smart IDS/IPS | Cybersecurity Project
+</footer>
+
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+// ======================================
+// NETWORK PROTOCOL DISTRIBUTION CHART
+// ======================================
+
+const chartElement = document.getElementById('protocolChart');
+
+const protocolData = JSON.parse(
+    chartElement.dataset.protocol
+);
+
+new Chart(chartElement, {
+
+    type: 'doughnut',
+
+    data: {
+
+        labels: ['TCP', 'UDP', 'ICMP', 'Other'],
+
+        datasets: [{
+
+            data: [
+                protocolData.TCP,
+                protocolData.UDP,
+                protocolData.ICMP,
+                protocolData.OTHER
+            ],
+
+            backgroundColor: [
+                '#06b6d4',
+                '#3b82f6',
+                '#a855f7',
+                '#f59e0b'
+            ],
+
+            borderWidth: 2,
+            borderColor: '#0f172a'
+
+        }]
+    },
+
+    options: {
+
+        responsive: true,
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+                position: 'bottom',
+
+                labels: {
+                    color: '#ffffff'
+                }
+            },
+
+            title: {
+                display: true,
+                text: 'Network Traffic by Protocol',
+                color: '#ffffff'
+            }
+        }
+    }
+});
+
+
+// ======================================
+// SECURITY RISK DISTRIBUTION CHART
+// ======================================
+
+const riskElement = document.getElementById('riskChart');
+
+const riskData = JSON.parse(
+    riskElement.dataset.risk
+);
+
+new Chart(riskElement, {
+
+    type: 'bar',
+
+    data: {
+
+        labels: ['High', 'Medium', 'Low'],
+
+        datasets: [{
+
+            label: 'Security Alerts',
+
+            data: [
+                riskData.High,
+                riskData.Medium,
+                riskData.Low
+            ],
+
+            backgroundColor: [
+                '#ef4444',
+                '#f59e0b',
+                '#22c55e'
+            ],
+
+            borderRadius: 6
+
+        }]
+    },
+
+    options: {
+
+        responsive: true,
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+                labels: {
+                    color: '#ffffff'
+                }
+            },
+
+            title: {
+                display: true,
+                text: 'Security Alerts by Risk Level',
+                color: '#ffffff'
+            }
+        },
+
+        scales: {
+
+            x: {
+                ticks: {
+                    color: '#ffffff'
+                }
+            },
+
+            y: {
+                beginAtZero: true,
+
+                ticks: {
+                    color: '#ffffff',
+                    precision: 0
+                }
+            }
+        }
+    }
+});
+
+</script>
+
+<!-- Automatic Dashboard Refresh -->
+<script>
+    setInterval(function() {
+        window.location.reload();
+    }, 10000);
+</script>
+
+</body>
+</html>
